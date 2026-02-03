@@ -1,0 +1,24 @@
+[package]
+name = "phaedra-coverage"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+tracing.workspace = true
+serde.workspace = true
+
+[target.'cfg(unix)'.dependencies]
+libc.workspace = true
+
+[[bench]]
+name = "coverage_bench"
+harness = false
+
+[dev-dependencies]
+criterion = { workspace = true }
+
+[build-dependencies]
+cc.workspace = true

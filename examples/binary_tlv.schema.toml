@@ -1,0 +1,30 @@
+name = "binary_tlv"
+description = "Type-Length-Value binary protocol"
+
+[[fields]]
+name = "magic"
+type = "magic"
+length = 4
+value = "50484452"
+mutable = false
+description = "PHDR magic bytes"
+
+[[fields]]
+name = "version"
+type = "u8"
+description = "Protocol version"
+
+[[fields]]
+name = "type"
+type = "u8"
+description = "Message type"
+
+[[fields]]
+name = "payload"
+type = "lp_bytes16_be"
+description = "Payload length (u16be) followed by payload bytes"
+
+[[fields]]
+name = "checksum"
+type = "u32_be"
+description = "CRC32 checksum — fuzzing this tests checksum validation"

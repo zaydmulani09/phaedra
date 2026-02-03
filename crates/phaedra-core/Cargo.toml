@@ -1,0 +1,24 @@
+[package]
+name = "phaedra-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+phaedra-harness = { path = "../phaedra-harness" }
+phaedra-coverage = { path = "../phaedra-coverage" }
+phaedra-mutator = { path = "../phaedra-mutator" }
+phaedra-corpus = { path = "../phaedra-corpus" }
+phaedra-llm = { path = "../phaedra-llm" }
+phaedra-schema = { path = "../phaedra-schema" }
+rand = "0.8"
+rusqlite.workspace = true
+tokio.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+tempfile = "3"

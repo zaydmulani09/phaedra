@@ -1,0 +1,18 @@
+[package]
+name = "phaedra-targets"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "phaedra-target-http"
+path = "src/http_parser.rs"
+
+[[bin]]
+name = "phaedra-target-tlv"
+path = "src/tlv_parser.rs"
+
+[[bin]]
+name = "phaedra-target-json"
+path = "src/json_parser.rs"

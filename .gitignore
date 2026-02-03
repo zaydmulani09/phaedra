@@ -1,0 +1,12 @@
+﻿/target
+phaedra-corpus/
+phaedra-crashes/
+phaedra-corpus-compat/
+phaedra-crashes-compat/
+/.exe
+*.log
+*.db
+CONTEXT.md
+PROMPT_ENGINEER_HANDOFF.md
+phaedra-report.md
+inferred.schema.toml

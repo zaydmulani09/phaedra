@@ -1,0 +1,18 @@
+[package]
+name = "phaedra-mutator"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+rand = { version = "0.8", features = ["small_rng"] }
+serde.workspace = true
+tracing.workspace = true
+
+[[bench]]
+name = "mutation_bench"
+harness = false
+
+[dev-dependencies]
+criterion = { workspace = true }

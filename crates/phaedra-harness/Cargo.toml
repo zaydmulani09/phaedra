@@ -1,0 +1,17 @@
+[package]
+name = "phaedra-harness"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+phaedra-coverage = { path = "../phaedra-coverage" }
+tokio.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+serde.workspace = true
+async-trait.workspace = true
+
+[dev-dependencies]
+tempfile = "3"

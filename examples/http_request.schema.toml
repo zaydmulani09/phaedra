@@ -1,0 +1,47 @@
+name = "http_request"
+description = "Minimal HTTP/1.1 request schema for fuzzing HTTP parsers"
+
+[[fields]]
+name = "method"
+type = "bytes"
+length = 4
+description = "HTTP method (GET, POST, etc.) — 4 bytes"
+
+[[fields]]
+name = "space1"
+type = "magic"
+length = 1
+value = "20"
+mutable = false
+description = "Space separator"
+
+[[fields]]
+name = "path"
+type = "cstring"
+description = "Request path — null-terminated for fuzzing purposes"
+
+[[fields]]
+name = "version_prefix"
+type = "magic"
+length = 10
+value = "485454502f312e310d0a"
+mutable = false
+description = "HTTP/1.1\\r\\n"
+
+[[fields]]
+name = "content_length"
+type = "u32_be"
+description = "Content-Length header value"
+
+[[fields]]
+name = "header_end"
+type = "magic"
+length = 4
+value = "0d0a0d0a"
+mutable = false
+description = "\\r\\n\\r\\n header terminator"
+
+[[fields]]
+name = "body"
+type = "lp_bytes32_be"
+description = "Request body, prefixed by its own u32be length"
