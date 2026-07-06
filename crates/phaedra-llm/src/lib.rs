@@ -1,3 +1,14 @@
+//! LLM seed generation and cost tracking for three provider backends.
+//!
+//! `LlmClient` is an enum dispatching over `OllamaClient` (local HTTP to an Ollama instance),
+//! `OpenAIClient` (POST to `api.openai.com/v1/chat/completions` with Bearer auth), and
+//! `AnthropicClient` (POST to `api.anthropic.com/v1/messages` with `x-api-key`). All three share the
+//! same prompt templates from `prompt.rs` and return `LlmResponse` with token counts; `CostTracker`
+//! persists call records and estimated USD cost to a WAL SQLite database at `llm_costs.db`. The seed
+//! generation pipeline sends a structured prompt requesting hex-encoded inputs, then parses the response
+//! with three fallback strategies (JSON array, bracket extraction, object scanning) so malformed LLM
+//! output does not abort the campaign.
+
 pub mod anthropic;
 pub mod cost_tracker;
 pub mod ollama;

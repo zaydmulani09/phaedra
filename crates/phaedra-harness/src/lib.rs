@@ -1,3 +1,13 @@
+//! Target execution harnesses with shared memory coverage integration.
+//!
+//! The `Harness` trait exposes a single async `execute(&mut self, input: &[u8]) -> Result<ExecutionResult>`
+//! method. `StdinHarness` spawns the target, writes the input to its stdin, and waits up to `timeout`
+//! for exit; `SocketHarness` connects over TCP or UDP and sends the input as a network frame;
+//! `FileHarness` writes the input to a uniquely named temp file and passes it as the first argument.
+//! All three clear the SanCov shared memory bitmap before spawning and read it back afterward, populating
+//! `ExecutionResult::coverage` when a `SharedMemory` handle is provided. `ExecutionStatus` distinguishes
+//! `Ok`, `Timeout`, `Crash { signal }` (with Unix signal number when available), and `Error(String)`.
+
 use anyhow::Result;
 use async_trait::async_trait;
 use std::path::PathBuf;
