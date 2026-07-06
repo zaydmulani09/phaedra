@@ -130,7 +130,7 @@ impl MutationEngine {
         let output = self.apply(input, corpus, strategy);
 
         self.decay_counter += 1;
-        if self.decay_counter % self.decay_interval == 0 {
+        if self.decay_counter.is_multiple_of(self.decay_interval) {
             for w in &mut self.weights {
                 *w = (*w - 1.0) * (1.0 - self.decay_rate) + 1.0;
                 if *w < 1.0 {

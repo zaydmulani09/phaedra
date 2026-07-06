@@ -99,7 +99,7 @@ pub(crate) fn decode_hex(hex: &str) -> Vec<u8> {
     if hex.is_empty() {
         return vec![];
     }
-    if hex.len() % 2 != 0 {
+    if !hex.len().is_multiple_of(2) {
         return vec![];
     }
     (0..hex.len())

@@ -145,7 +145,7 @@ pub fn repeat_byte(input: &[u8], rng: &mut impl Rng) -> Vec<u8> {
     let byte: u8 = rng.gen();
     let pos = rng.gen_range(0..=input.len());
     let mut result = input.to_vec();
-    let repeated: Vec<u8> = std::iter::repeat(byte).take(count).collect();
+    let repeated: Vec<u8> = std::iter::repeat_n(byte, count).collect();
     result.splice(pos..pos, repeated);
     result
 }
