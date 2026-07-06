@@ -213,7 +213,7 @@ fn fixed_layout(l: usize, fields: &mut Vec<Field>) {
     }
 }
 
-fn ensure_unique_names(fields: &mut Vec<Field>) {
+fn ensure_unique_names(fields: &mut [Field]) {
     let mut counts: HashMap<String, usize> = HashMap::new();
     for f in fields.iter() {
         *counts.entry(f.name.clone()).or_insert(0) += 1;

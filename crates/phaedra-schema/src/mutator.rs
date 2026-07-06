@@ -389,7 +389,7 @@ fn generate_fields(fields: &[Field], out: &mut Vec<u8>) {
             }
             FieldType::Padding => {
                 let len = field.length.unwrap_or(0);
-                out.extend(std::iter::repeat(0u8).take(len));
+                out.extend(std::iter::repeat_n(0u8, len));
             }
             FieldType::Repeated => {
                 let count = field.length.unwrap_or(0);
