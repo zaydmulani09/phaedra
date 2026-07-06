@@ -427,25 +427,40 @@ mod tests {
 
     #[tokio::test]
     async fn test_stdin_harness_timeout() {
-        // Use python if available; skip if not
-        let python = if cfg!(windows) { "python" } else { "python3" };
-        let mut h = StdinHarness {
-            target: PathBuf::from(python),
-            timeout: Duration::from_millis(200),
-            shm: None,
-        };
-        // Spawn python sleeping 60s; should time out
-        let result = h.execute(b"").await;
-        // If python not found we get an error — that's fine, skip
-        match result {
-            Ok(r) => {
-                // May be Timeout or Error (if python not found)
-                assert!(
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            // Write a shell script that sleeps 10s regardless of stdin.
+            // python3 exits immediately on empty stdin, so we need a real blocker.
+            let script = std::env::temp_dir().join("phaedra_timeout_test.sh");
+            std::fs::write(&script, "#!/bin/sh\nsleep 10\n").unwrap();
+            std::fs::set_permissions(&script, std::fs::Permissions::from_mode(0o755)).unwrap();
+            let mut h = StdinHarness {
+                target: script.clone(),
+                timeout: Duration::from_millis(300),
+                shm: None,
+            };
+            let result = h.execute(b"").await.unwrap();
+            let _ = std::fs::remove_file(&script);
+            assert!(
+                matches!(result.status, ExecutionStatus::Timeout),
+                "expected Timeout, got {:?}", result.status
+            );
+        }
+        #[cfg(windows)]
+        {
+            let mut h = StdinHarness {
+                target: PathBuf::from("python"),
+                timeout: Duration::from_millis(300),
+                shm: None,
+            };
+            match h.execute(b"import time; time.sleep(10)").await {
+                Ok(r) => assert!(
                     matches!(r.status, ExecutionStatus::Timeout | ExecutionStatus::Error(_)),
                     "unexpected status: {:?}", r.status
-                );
+                ),
+                Err(_) => {}
             }
-            Err(_) => {} // binary not found — skip
         }
     }
 
