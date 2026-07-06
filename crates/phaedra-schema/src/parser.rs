@@ -83,13 +83,11 @@ fn validate_field(field: &Field, ctx: &str) -> Result<()> {
             }
             validate_fields(&field.fields, &loc)?;
         }
-        ref ft if ft.is_integer() => {
-            if field.length.is_some() {
-                bail!(
-                    "[{}] integer field '{:?}' must not have 'length' (size is implied by type)",
-                    loc, field.field_type
-                );
-            }
+        ref ft if ft.is_integer() && field.length.is_some() => {
+            bail!(
+                "[{}] integer field '{:?}' must not have 'length' (size is implied by type)",
+                loc, field.field_type
+            );
         }
         _ => {}
     }

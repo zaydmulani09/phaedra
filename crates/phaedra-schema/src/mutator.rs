@@ -65,6 +65,7 @@ fn field_runtime_size(field: &Field, input: &[u8], offset: usize) -> usize {
     }
 }
 
+#[allow(clippy::ptr_arg)]
 fn collect_mutable<'a>(
     input: &[u8],
     fields: &'a [Field],
@@ -100,7 +101,7 @@ fn apply_mutation(buf: &mut Vec<u8>, offset: usize, field: &Field, rng: &mut imp
         FieldType::U8 => {
             if offset < buf.len() {
                 buf[offset] = if rng.gen_bool(0.3) {
-                    *INTERESTING_U8.iter().nth(rng.gen_range(0..INTERESTING_U8.len())).unwrap()
+                    INTERESTING_U8[rng.gen_range(0..INTERESTING_U8.len())]
                 } else {
                     rng.gen()
                 };
@@ -361,7 +362,7 @@ fn generate_fields(fields: &[Field], out: &mut Vec<u8>) {
             FieldType::U64Le => out.extend_from_slice(&1u64.to_le_bytes()),
             FieldType::Bytes => {
                 let len = field.length.unwrap_or(0);
-                out.extend(std::iter::repeat(0x41u8).take(len));
+                out.extend(std::iter::repeat_n(0x41u8, len));
             }
             FieldType::Cstring => {
                 out.extend_from_slice(b"test\0");
@@ -383,7 +384,7 @@ fn generate_fields(fields: &[Field], out: &mut Vec<u8>) {
                     out.extend_from_slice(&hex_decode(hex));
                 } else {
                     let len = field.length.unwrap_or(0);
-                    out.extend(std::iter::repeat(0u8).take(len));
+                    out.extend(std::iter::repeat_n(0u8, len));
                 }
             }
             FieldType::Padding => {

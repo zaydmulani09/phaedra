@@ -164,7 +164,7 @@ fn detect_null_or_bytes(samples: &[Vec<u8>], magic_end: usize, fields: &mut Vec<
                 null_pos == 0
                     || payload[..null_pos]
                         .iter()
-                        .all(|&b| b >= 0x20 && b <= 0x7e)
+                        .all(|&b| (0x20..=0x7e).contains(&b))
             } else {
                 false
             }
