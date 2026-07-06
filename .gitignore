@@ -1,8 +1,8 @@
 ﻿/target
-phaedra-corpus/
-phaedra-crashes/
-phaedra-corpus-compat/
-phaedra-crashes-compat/
+/phaedra-corpus/
+/phaedra-crashes/
+/phaedra-corpus-compat/
+/phaedra-crashes-compat/
 /.exe
 *.log
 *.db

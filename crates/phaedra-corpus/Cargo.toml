@@ -1,0 +1,22 @@
+[package]
+name = "phaedra-corpus"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+rusqlite = { workspace = true }
+anyhow.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+rand = { version = "0.8", features = ["small_rng"] }
+
+[[bench]]
+name = "corpus_bench"
+harness = false
+
+[dev-dependencies]
+criterion = { workspace = true }
+tempfile = "3"
