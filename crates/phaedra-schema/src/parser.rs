@@ -56,7 +56,7 @@ fn validate_field(field: &Field, ctx: &str) -> Result<()> {
                     match &field.value {
                         None => bail!("[{}] 'magic' field requires 'value'", loc),
                         Some(hex) => {
-                            if hex.len() % 2 != 0 {
+                            if !hex.len().is_multiple_of(2) {
                                 bail!("[{}] 'magic' value '{}' has odd hex length", loc, hex);
                             }
                             if hex.chars().any(|c| !c.is_ascii_hexdigit()) {

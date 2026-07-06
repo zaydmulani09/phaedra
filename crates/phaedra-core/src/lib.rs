@@ -304,7 +304,7 @@ pub async fn run_campaign(config: CampaignConfig, shared: Option<stats::SharedSt
             }
         }
 
-        if stats.total_execs % 10 == 0 {
+        if stats.total_execs.is_multiple_of(10) {
             if let Some(ref shared) = shared {
                 if let Ok(mut live) = shared.lock() {
                     live.total_execs = stats.total_execs;
