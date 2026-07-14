@@ -14,6 +14,7 @@ struct Cli {
 }
 
 #[derive(Subcommand)]
+#[allow(clippy::large_enum_variant)]
 enum Commands {
     Fuzz(FuzzArgs),
     /// Interactive setup wizard — generates phaedra.toml
@@ -320,13 +321,13 @@ fn build_campaign_config_from_file(
         }
     };
 
-    let corpus_dir = if args.corpus_dir != PathBuf::from("./phaedra-corpus") {
+    let corpus_dir = if args.corpus_dir.as_os_str() != "./phaedra-corpus" {
         args.corpus_dir.clone()
     } else {
         PathBuf::from(&file.corpus_dir)
     };
 
-    let crash_dir = if args.crash_dir != PathBuf::from("./phaedra-crashes") {
+    let crash_dir = if args.crash_dir.as_os_str() != "./phaedra-crashes" {
         args.crash_dir.clone()
     } else {
         PathBuf::from(&file.crash_dir)
@@ -644,7 +645,7 @@ async fn main() -> Result<()> {
                 println!("No crashes recorded yet.");
                 return Ok(());
             }
-            println!("{:<6} {:<10} {:<8} {:<12} {}", "ID", "SEVERITY", "HITS", "SIGNATURE", "STATUS");
+            println!("{:<6} {:<10} {:<8} {:<12} STATUS", "ID", "SEVERITY", "HITS", "SIGNATURE");
             println!("{}", "-".repeat(70));
             for r in &records {
                 println!(
@@ -905,11 +906,11 @@ async fn main() -> Result<()> {
                 }
                 if unique > 0 {
                     println!(
-                        "          {}: {}  {}: {}  {}: {}  {}: {}",
+                        "          {}: {}  {}: {}  {}: {}  LOW: {}",
                         color::red("CRITICAL"), crit,
                         color::yellow("HIGH"), high,
                         color::cyan("MEDIUM"), med,
-                        "LOW", low,
+                        low,
                     );
                 }
             } else {
@@ -1058,11 +1059,7 @@ type = "lp_bytes8"
 
             let orig_len = record.input.len();
             let min_len = minimized.len();
-            let pct = if orig_len > 0 {
-                100 - (min_len * 100 / orig_len)
-            } else {
-                0
-            };
+            let pct = (min_len * 100).checked_div(orig_len).map(|v| 100 - v).unwrap_or(0);
             println!(
                 "{}",
                 color::green(&format!(
@@ -1204,7 +1201,7 @@ async fn minimize_input(
                 r[pos] = 0x00;
                 r
             }
-            _ => current[..current.len() / 2.max(1)].to_vec(),
+            _ => current[..current.len() / 2].to_vec(),
         };
 
         if reduced.is_empty() {
